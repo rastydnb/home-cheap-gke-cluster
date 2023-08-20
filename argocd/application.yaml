@@ -19,7 +19,7 @@ server:
     namespace: argocd
     project: default
     source:
-      repoURL: https://github.com/rastydnb/home-cheap-gke-cluster
+      repoURL: https://github.com/rastydnb/home-cheap-gke-cluster.gitss
       targetRevision: HEAD
       path: argocd/manifests/networking
       directory:
