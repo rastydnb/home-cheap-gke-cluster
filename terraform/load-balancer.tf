@@ -21,7 +21,7 @@ resource "google_compute_subnetwork" "proxy" {
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_backend_service
 resource "google_compute_region_backend_service" "default" {
   # This cannot be deployed until the ingress gateway is deployed and the standalone NEG is automatically created
-  depends_on = [null_resource.gloo, null_resource.delete_ingressgateway]
+  depends_on = [helm_release.traefik]
   project = google_compute_subnetwork.default.project
   region  = google_compute_subnetwork.default.region
   name        = "l7-xlb-backend-service-http"
@@ -57,13 +57,13 @@ resource "google_compute_region_backend_service" "default" {
   }
 }
 
-resource "null_resource" "delete_ingressgateway" {
-  provisioner "local-exec" {
-    when    = destroy
-    # Delete ingressgateway on destroy
-    command = "gcloud compute network-endpoint-groups delete ingressgateway --quiet"
-  }
-}
+# resource "null_resource" "delete_ingressgateway" {
+#   provisioner "local-exec" {
+#     when    = destroy
+#     # Delete ingressgateway on destroy
+#     command = "gcloud compute network-endpoint-groups delete ingressgateway --quiet --region us-west4"
+#   }
+# }
 
 # https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/compute_region_health_check
 resource "google_compute_region_health_check" "default" {
@@ -73,7 +73,7 @@ resource "google_compute_region_health_check" "default" {
   name   = "l7-xlb-basic-check-http"
   http_health_check {
     port_specification = "USE_SERVING_PORT"
-    request_path = "/"
+    request_path = "/ping"
   }
   timeout_sec         = 1
   check_interval_sec  = 3
@@ -95,7 +95,7 @@ resource "google_compute_firewall" "default" {
   project = google_compute_network.default.project
   # Allow for ingress from the health checks and the managed Envoy proxy. For more information, see:
   # https://cloud.google.com/load-balancing/docs/https#target-proxies
-  source_ranges = ["130.211.0.0/22", "35.191.0.0/16", "11.129.0.0/23"]
+  source_ranges = ["130.211.0.0/22", "35.191.0.0/16", "11.129.0.0/23","5.0.0.0/24"]
   allow {
     protocol = "tcp"
   }
