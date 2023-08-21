@@ -9,6 +9,8 @@ spec:
     chart: traefik
     repoURL: https://traefik.github.io/charts
     targetRevision: 24.0.0
+    plugin:
+      name: kustomized-helm
     helm:
       releaseName: traefik
       valuesObject:
