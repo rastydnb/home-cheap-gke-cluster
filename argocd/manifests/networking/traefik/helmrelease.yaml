@@ -4,7 +4,7 @@ metadata:
   name: traefik
   namespace: networking
 spec:
-  project: networking
+  project: default
   source:
     chart: traefik
     repoURL: https://traefik.github.io/charts
