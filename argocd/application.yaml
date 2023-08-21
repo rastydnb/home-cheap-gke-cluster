@@ -1,32 +1,31 @@
-server:
-  additionalApplications:
-  - name: cluster-config
-    namespace: argocd
-    project: default
-    source:
-      repoURL: https://github.com/rastydnb/home-cheap-gke-cluster.git
-      targetRevision: HEAD
-      path: argocd/manifests/cluster
-      directory:
-        recurse: true
-    destination:
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: false
-        selfHeal: false
-  - name: traefik
-    namespace: argocd
-    project: default
-    source:
-      repoURL: https://github.com/rastydnb/home-cheap-gke-cluster.git
-      targetRevision: HEAD
-      path: argocd/manifests/networking
-      directory:
-        recurse: true
-    destination:
-      server: https://kubernetes.default.svc
-    syncPolicy:
-      automated:
-        prune: false
-        selfHeal: false
+applications:
+- name: cluster-config
+  namespace: argocd
+  project: default
+  source:
+    repoURL: https://github.com/rastydnb/home-cheap-gke-cluster.git
+    targetRevision: HEAD
+    path: argocd/manifests/cluster
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+- name: traefik
+  namespace: argocd
+  project: default
+  source:
+    repoURL: https://github.com/rastydnb/home-cheap-gke-cluster.git
+    targetRevision: HEAD
+    path: argocd/manifests/networking
+    directory:
+      recurse: false
+  destination:
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
