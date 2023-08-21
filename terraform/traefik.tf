@@ -36,24 +36,64 @@ provider "helm" {
     }
 }
 
-resource "helm_release" "traefik" {
-  depends_on = [null_resource.local_k8s_context]
-  namespace        = var.namespace
-  create_namespace = true
-  name             = "traefik"
-  repository       = "https://traefik.github.io/charts"
-  chart            = "traefik"
-  version          = var.traefik_chart_version
+# resource "helm_release" "traefik" {
+#   depends_on = [null_resource.local_k8s_context]
+#   namespace        = var.namespace
+#   create_namespace = true
+#   name             = "traefik"
+#   repository       = "https://traefik.github.io/charts"
+#   chart            = "traefik"
+#   version          = var.traefik_chart_version
 
-  # Helm chart deployment can sometimes take longer than the default 5 minutes
-  timeout = var.timeout_seconds
+#   # Helm chart deployment can sometimes take longer than the default 5 minutes
+#   timeout = var.timeout_seconds
 
-  # If values file specified by the var.values_file input variable exists then apply the values from this file
-  # else apply the default values from the chart
-  values = [fileexists("${path.root}/${var.values_file}") == true ? file("${path.root}/${var.values_file}") : ""]
+#   # If values file specified by the var.values_file input variable exists then apply the values from this file
+#   # else apply the default values from the chart
+#   values = [fileexists("${path.root}/${var.values_file}") == true ? file("${path.root}/${var.values_file}") : ""]
+# }
 
-  set {
-    name  = "deployment.replicas"
-    value = var.replica_count
+
+resource "null_resource" "bootstrap_flux" {
+  provisioner "local-exec" {
+    command = "kubectl apply --kustomize ../kubernetes/bootstrap"
   }
 }
+
+resource "null_resource" "flux_config" {
+  provisioner "local-exec" {
+    command = "kubectl apply --kustomize ../kubernetes/flux/config"
+  }
+}
+
+
+
+
+# resource "helm_release" "argocd" {
+#   name  = "argocd"
+
+#   repository       = "https://argoproj.github.io/argo-helm"
+#   chart            = "argo-cd"
+#   namespace        = "argocd"
+#   version          = "5.43.4"
+#   create_namespace = true
+
+#   # values = [
+#   #   file("values.yaml")
+#   # ]
+# }
+
+
+# resource "helm_release" "argocd-apps" {
+#   depends_on = [helm_release.argocd]
+#   name  = "argocd-apps"
+
+#   repository       = "https://argoproj.github.io/argo-helm"
+#   chart            = "argocd-apps"
+#   namespace        = "argocd"
+#   version          = "1.4.1"
+
+#   values = [
+#     file("../argocd/application.yaml")
+#   ]
+# }
