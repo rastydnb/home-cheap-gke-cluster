@@ -24,8 +24,11 @@ applications:
     directory:
       recurse: false
   destination:
+    namespace: networking
     server: https://kubernetes.default.svc
   syncPolicy:
     automated:
       prune: false
       selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
