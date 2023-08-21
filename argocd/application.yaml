@@ -1,18 +1,21 @@
-projects: 
-- name: guestbook
+projects:
+- name: networking
   namespace: argocd
   additionalLabels: {}
   additionalAnnotations: {}
   permitOnlyProjectScopedClusters: false
   finalizers:
   - resources-finalizer.argocd.argoproj.io
-  description: Example Project
+  description: Networking Project
   sourceRepos:
   - '*'
   destinations:
-  - namespace: guestbook
+  - namespace: networking
     server: https://kubernetes.default.svc
-  clusterResourceWhitelist: []
+
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
   clusterResourceBlacklist: []
   namespaceResourceBlacklist:
   - group: ''
@@ -35,12 +38,12 @@ projects:
     schedule: '10 1 * * *'
     duration: 1h
     applications:
-    - '*-prod'
+    - '*'
     manualSync: true
-  signatureKeys:
-  - keyID: ABCDEF1234567890
+  # signatureKeys:
+  # - keyID: ABCDEF1234567890
   sourceNamespaces:
-  - argocd
+  - networking
 
 applications:
 - name: networking
