@@ -92,7 +92,9 @@ spec:
         ingressRoute:
           dashboard:
             enabled: true
-
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
   destination:
     server: "https://kubernetes.default.svc"
     # namespace: kubeseal
