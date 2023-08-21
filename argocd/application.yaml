@@ -14,18 +14,18 @@ applications:
 #     automated:
 #       prune: false
 #       selfHeal: false
-# - name: networking
-#   namespace: argocd
-#   project: default
-#   source:
-#     repoURL: https://github.com/rastydnb/home-cheap-gke-cluster.git
-#     targetRevision: HEAD
-#     path: argocd/manifests/networking
-#     directory:
-#       recurse: false
-#   destination:
-#     server: https://kubernetes.default.svc
-#   syncPolicy:
-#     automated:
-#       prune: false
-#       selfHeal: false
+- name: networking
+  namespace: argocd
+  project: default
+  source:
+    repoURL: https://github.com/rastydnb/home-cheap-gke-cluster.git
+    targetRevision: HEAD
+    path: argocd/manifests/networking
+    directory:
+      recurse: false
+  destination:
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false

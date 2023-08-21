@@ -96,5 +96,5 @@ spec:
     syncOptions:
     - CreateNamespace=true
   destination:
-    server: "https://kubernetes.default.svc"
-    # namespace: kubeseal
+    namespace: networking
+    server: https://kubernetes.default.svc
