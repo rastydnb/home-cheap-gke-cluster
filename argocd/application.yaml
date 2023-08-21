@@ -1,19 +1,48 @@
+projects: 
+- name: guestbook
+  namespace: argocd
+  additionalLabels: {}
+  additionalAnnotations: {}
+  permitOnlyProjectScopedClusters: false
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  description: Example Project
+  sourceRepos:
+  - '*'
+  destinations:
+  - namespace: guestbook
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist: []
+  clusterResourceBlacklist: []
+  namespaceResourceBlacklist:
+  - group: ''
+    kind: ResourceQuota
+  - group: ''
+    kind: LimitRange
+  - group: ''
+    kind: NetworkPolicy
+    orphanedResources: {}
+    roles: []
+  namespaceResourceWhitelist:
+  - group: 'apps'
+    kind: Deployment
+  - group: 'apps'
+    kind: StatefulSet
+  orphanedResources: {}
+  roles: []
+  syncWindows:
+  - kind: allow
+    schedule: '10 1 * * *'
+    duration: 1h
+    applications:
+    - '*-prod'
+    manualSync: true
+  signatureKeys:
+  - keyID: ABCDEF1234567890
+  sourceNamespaces:
+  - argocd
+
 applications:
-# - name: cluster-config
-#   namespace: argocd
-#   project: default
-#   source:
-#     repoURL: https://github.com/rastydnb/home-cheap-gke-cluster.git
-#     targetRevision: HEAD
-#     path: argocd/manifests/cluster
-#     directory:
-#       recurse: true
-#   destination:
-#     server: https://kubernetes.default.svc
-#   syncPolicy:
-#     automated:
-#       prune: false
-#       selfHeal: false
 - name: networking
   namespace: argocd
   project: default
@@ -30,5 +59,3 @@ applications:
     automated:
       prune: false
       selfHeal: false
-    syncOptions:
-    - CreateNamespace=true
