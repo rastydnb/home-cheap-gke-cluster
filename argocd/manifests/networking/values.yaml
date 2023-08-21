@@ -1,0 +1,81 @@
+deployment:
+  enabled: true
+  replicas: 2
+  healthchecksPort: 80
+
+service:
+  type: ClusterIP
+  annotations:
+    cloud.google.com/neg: '{"exposed_ports": {"80":{"name": "ingressgateway"}}}'
+ports:
+  # The name of this one can't be changed as it is used for the readiness and
+  # liveness probes, but you can adjust its config to your liking
+  traefik:
+    expose: false
+  web:
+    port: 80
+    expose: true
+    targetPort: 80
+    containerPort: 80
+  websecure:
+    ## Enable this entrypoint as a default entrypoint. When a service doesn't explicity set an entrypoint it will only use this entrypoint.
+    # asDefault: true
+    port: 443
+    targetPort: 443
+    # hostPort: 8443
+    containerPort: 443
+    expose: true
+providers:
+  kubernetesCRD:
+    enabled: true
+    allowCrossNamespace: true
+    allowExternalNameServices: true
+  kubernetesIngress:
+    enabled: true
+    allowExternalNameServices: true
+    allowCrossNamespace: true
+    # https://github.com/kubernetes-sigs/external-dns/issues/1940
+    publishedService:
+      enabled: false
+globalArguments:
+- --entryPoints.web.address=:80/tcp
+- --entryPoints.websecure.address=:443/tcp
+- --entryPoints.web.forwardedHeaders.insecure
+- --entryPoints.websecure.forwardedHeaders.insecure
+- --api=true
+- --api.dashboard=true #required for the dashboard
+#- --api.insecure=true #only used in combination with api.dashboard=true. not recommended  https://doc.traefik.io/traefik/operations/dashboard/#insecure-mode
+- --ping=true
+- '--ping.entrypoint=web'
+- --providers.kubernetescrd
+- --providers.kubernetescrd.allowCrossNamespace=true
+# - --providers.kubernetesingress.ingressclass=traefik
+- --metrics.prometheus=true
+- --metrics.prometheus.entryPoint=metrics
+additionalArguments:
+- --log.level=DEBUG
+- --log.filePath=/data/traefik/logs/traefik.log
+- --accessLog=true
+- --accesslog.filepath=/data/traefik/logs/access.log
+- --accesslog.fields.defaultmode=keep
+- --accesslog.fields.headers.defaultmode=keep
+- --accesslog.fields.headers.names.X-Forwarded-User=keep
+- --providers.kubernetescrd
+- --providers.kubernetesingress.ingressendpoint.ip=${TRAEFIK_SERVICE_ADDR}"
+#- "--providers.kubernetesingress.ingressendpoint.hostname=${SECRET_DOMAIN}"
+- --serverstransport.insecureskipverify=true
+- --providers.kubernetesingress.ingressclass=traefik
+- --providers.kubernetesingress.allowexternalnameservices=true
+- --providers.kubernetescrd.allowexternalnameservices=true
+securityContext:
+  capabilities:
+    drop: [ALL]
+    add: [NET_BIND_SERVICE]
+  readOnlyRootFilesystem: true
+  runAsGroup: 0
+  runAsNonRoot: false
+  runAsUser: 0
+
+ingressRoute:
+  dashboard:
+    enabled: true
