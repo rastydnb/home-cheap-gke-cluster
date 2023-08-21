@@ -22,7 +22,7 @@ projects:
 applications:
 - name: networking
   namespace: argocd
-  project: default
+  project: networking
   source:
     repoURL: https://github.com/rastydnb/home-cheap-gke-cluster.git
     targetRevision: HEAD

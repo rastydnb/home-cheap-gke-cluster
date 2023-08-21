@@ -101,4 +101,4 @@ spec:
     - CreateNamespace=true
   destination:
     namespace: networking
-    server: https://kubernetes.networking.svc
+    server: https://kubernetes.default.svc
