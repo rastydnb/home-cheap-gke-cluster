@@ -16,32 +16,6 @@ projects:
   clusterResourceWhitelist:
   - group: '*'
     kind: '*'
-  clusterResourceBlacklist: []
-  namespaceResourceBlacklist:
-  - group: ''
-    kind: ResourceQuota
-  - group: ''
-    kind: LimitRange
-  - group: ''
-    kind: NetworkPolicy
-    orphanedResources: {}
-    roles: []
-  namespaceResourceWhitelist:
-  - group: 'apps'
-    kind: Deployment
-  - group: 'apps'
-    kind: StatefulSet
-  orphanedResources: {}
-  roles: []
-  syncWindows:
-  - kind: allow
-    schedule: '10 1 * * *'
-    duration: 1h
-    applications:
-    - '*'
-    manualSync: true
-  # signatureKeys:
-  # - keyID: ABCDEF1234567890
   sourceNamespaces:
   - networking
 
@@ -60,5 +34,5 @@ applications:
     server: https://kubernetes.default.svc
   syncPolicy:
     automated:
-      prune: false
-      selfHeal: false
+      prune: true
+      selfHeal: true
