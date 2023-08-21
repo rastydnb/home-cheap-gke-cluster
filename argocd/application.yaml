@@ -26,7 +26,7 @@ applications:
   source:
     repoURL: https://github.com/rastydnb/home-cheap-gke-cluster.git
     targetRevision: HEAD
-    path: argocd/manifests/networking
+    path: argocd/manifests/networkingh
     directory:
       recurse: false
   destination:
@@ -36,3 +36,23 @@ applications:
     automated:
       prune: true
       selfHeal: true
+
+
+
+
+
+
+# project: networking
+# source:
+#   repoURL: 'https://traefik.github.io/charts'
+#   targetRevision: 24.0.0
+#   chart: traefik
+# destination:
+#   server: 'https://kubernetes.default.svc'
+#   namespace: networking
+# syncPolicy:
+#   automated:
+#     prune: true
+#     selfHeal: true
+#   syncOptions:
+#     - CreateNamespace=true
