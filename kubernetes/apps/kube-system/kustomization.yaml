@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
 - ./namespace.yaml
 - ./node-feature-discovery/ks.yaml
-- ./reloader/ks.yaml
+# - ./reloader/ks.yaml
 # - ./external-secrets/ks.yaml
