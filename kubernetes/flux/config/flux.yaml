@@ -1,4 +1,5 @@
-apiVersion: source.toolkit.fluxcd.io/v1
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
   name: flux-manifests
@@ -9,7 +10,7 @@ spec:
   ref:
     tag: v0.39.0
 ---
-apiVersion: kustomize.toolkit.fluxcd.io/v1
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
   name: flux
@@ -23,69 +24,69 @@ spec:
     kind: OCIRepository
     name: flux-manifests
   patches:
-  - patch: |
-      $patch: delete
-      apiVersion: networking.k8s.io/v1
-      kind: NetworkPolicy
-      metadata:
-        name: not-used
-    target:
-      group: networking.k8s.io
-      version: v1
-      kind: NetworkPolicy
-  - patch: |
-      - op: add
-        path: /spec/template/spec/containers/0/args/-
-        value: --concurrent=20
-      - op: add
-        path: /spec/template/spec/containers/0/args/-
-        value: --requeue-dependency=5s
-      - op: add
-        path: /spec/template/spec/containers/0/args/-
-        value: --kube-api-qps=500
-      - op: add
-        path: /spec/template/spec/containers/0/args/-
-        value: --kube-api-burst=1000
-    target:
-      kind: Deployment
-      name: "(kustomize-controller|helm-controller|source-controller)"
-  - patch: |
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: all
-      spec:
-        template:
-          spec:
-            containers:
-              - name: manager
-                resources:
-                  limits:
-                    memory: 2Gi
-    target:
-      kind: Deployment
-      name: "(kustomize-controller|helm-controller|source-controller)"
+    - patch: |
+        $patch: delete
+        apiVersion: networking.k8s.io/v1
+        kind: NetworkPolicy
+        metadata:
+          name: not-used
+      target:
+        group: networking.k8s.io
+        version: v1
+        kind: NetworkPolicy
+    - patch: |
+        - op: add
+          path: /spec/template/spec/containers/0/args/-
+          value: --concurrent=20
+        - op: add
+          path: /spec/template/spec/containers/0/args/-
+          value: --requeue-dependency=5s
+        - op: add
+          path: /spec/template/spec/containers/0/args/-
+          value: --kube-api-qps=500
+        - op: add
+          path: /spec/template/spec/containers/0/args/-
+          value: --kube-api-burst=1000
+      target:
+        kind: Deployment
+        name: "(kustomize-controller|helm-controller|source-controller)"
+    - patch: |
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: all
+        spec:
+          template:
+            spec:
+              containers:
+                - name: manager
+                  resources:
+                    limits:
+                      memory: 2Gi
+      target:
+        kind: Deployment
+        name: "(kustomize-controller|helm-controller|source-controller)"
 
-  - patch: |
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: all
-      spec:
-        template:
-          spec:
-            containers:
-              - name: manager
-                readinessProbe:
-                  periodSeconds: 15
-                  timeoutSeconds: 30
-                  failureThreshold: 10
-                  successThreshold: 1
-                livenessProbe:
-                  periodSeconds: 15
-                  timeoutSeconds: 30
-                  failureThreshold: 10
-                  successThreshold: 1
-    target:
-      kind: Deployment
-      name: "(kustomize-controller|helm-controller|source-controller)"
+    - patch: |
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: all
+        spec:
+          template:
+            spec:
+              containers:
+                - name: manager
+                  readinessProbe:
+                    periodSeconds: 15
+                    timeoutSeconds: 30
+                    failureThreshold: 10
+                    successThreshold: 1
+                  livenessProbe:
+                    periodSeconds: 15
+                    timeoutSeconds: 30
+                    failureThreshold: 10
+                    successThreshold: 1
+      target:
+        kind: Deployment
+        name: "(kustomize-controller|helm-controller|source-controller)"
