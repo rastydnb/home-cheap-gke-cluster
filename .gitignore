@@ -17,3 +17,6 @@ credentials.json
 *.pfx
 
 terraform.tfvars
+config.gcp.tfbackend
+secrets.tf
+home-ops.code-workspace

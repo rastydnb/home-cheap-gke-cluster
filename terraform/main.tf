@@ -1,4 +1,4 @@
-
+# terraform init  -backend-config=config.gcp.tfbackend
 
 variable "project_id" {
   description = "The project ID to host the cluster in"
@@ -59,3 +59,12 @@ resource "google_compute_network" "default" {
   # Everything in this solution is deployed regionally
   routing_mode = "REGIONAL"
 }
+
+variable "bucket_tfstate" {
+  description = "The bucket tfstate name"
+}
+
+variable "load_balancer" {
+  description = "Enable cheap load balancer with NEG"
+}
+

@@ -7,6 +7,7 @@
 # More information is available here: https://cloud.google.com/load-balancing/docs/https/proxy-only-subnets
 resource "google_compute_subnetwork" "proxy" {
   depends_on = [google_compute_network.default]
+  count = var.load_balancer ? 1 : 0
   provider = google-beta
   name          = "proxy-only-subnet"
   # This CIDR doesn't conflict with GKE's subnet
@@ -21,8 +22,8 @@ resource "google_compute_subnetwork" "proxy" {
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_backend_service
 resource "google_compute_region_backend_service" "default" {
   # This cannot be deployed until the ingress gateway is deployed and the standalone NEG is automatically created
-  # depends_on = [helm_release.traefik]
-  depends_on = [helm_release.argocd]
+  depends_on = [null_resource.flux_config]
+  count = var.load_balancer ? 1 : 0
   project = google_compute_subnetwork.default.project
   region  = google_compute_subnetwork.default.region
   name        = "l7-xlb-backend-service-http"
@@ -31,7 +32,7 @@ resource "google_compute_region_backend_service" "default" {
 
   # Scheme required for a Regional External HTTP Load Balancer. This uses an external managed Envoy proxy
   load_balancing_scheme = "EXTERNAL_MANAGED"
-  health_checks = [google_compute_region_health_check.default.id]
+  health_checks = [try(google_compute_region_health_check.default[0].id,"empty")]
 
   backend {
     # See the gloo.tf for more information on the ingressgateway standalone NEG that is automatically created
@@ -69,6 +70,7 @@ resource "google_compute_region_backend_service" "default" {
 # https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/compute_region_health_check
 resource "google_compute_region_health_check" "default" {
   depends_on = [google_compute_firewall.default]
+  count = var.load_balancer  ? 1 : 0
   project = google_compute_subnetwork.default.project
   region  = google_compute_subnetwork.default.region
   name   = "l7-xlb-basic-check-http"
@@ -83,6 +85,7 @@ resource "google_compute_region_health_check" "default" {
 }
 
 resource "google_compute_address" "default" {
+  count = var.load_balancer  ? 1 : 0
   name = var.ip_address_name
   project = google_compute_subnetwork.default.project
   region  = google_compute_subnetwork.default.region
@@ -92,6 +95,7 @@ resource "google_compute_address" "default" {
 
 resource "google_compute_firewall" "default" {
   name = "fw-allow-health-check-and-proxy"
+  count = var.load_balancer  ? 1 : 0
   network = google_compute_network.default.id
   project = google_compute_network.default.project
   # Allow for ingress from the health checks and the managed Envoy proxy. For more information, see:
