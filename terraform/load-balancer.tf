@@ -22,7 +22,7 @@ resource "google_compute_subnetwork" "proxy" {
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_region_backend_service
 resource "google_compute_region_backend_service" "default" {
   # This cannot be deployed until the ingress gateway is deployed and the standalone NEG is automatically created
-  depends_on = [null_resource.flux_config]
+  # depends_on = [null_resource.flux_config]
   count = var.load_balancer ? 1 : 0
   project = google_compute_subnetwork.default.project
   region  = google_compute_subnetwork.default.region

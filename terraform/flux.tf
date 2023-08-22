@@ -1,100 +1,120 @@
-
-variable "namespace" {
-  description = "Namespace to install traefik chart into"
-  type        = string
-  default     = "traefik"
+variable "github_token" {
+  sensitive = true
+  type      = string
+  default = "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"
 }
 
-variable "traefik_chart_version" {
-  description = "Version of Traefik chart to install"
-  type        = string
-  default     = "24.0.0" # See https://artifacthub.io/packages/helm/traefik/traefik for latest version(s)
+variable "github_org" {
+  type = string
+  default = "rastydnb"
 }
 
-# Helm chart deployment can sometimes take longer than the default 5 minutes
-variable "timeout_seconds" {
-  type        = number
-  description = "Helm chart deployment can sometimes take longer than the default 5 minutes. Set a custom timeout here."
-  default     = 800 # 10 minutes
+variable "github_repository" {
+  type = string
+  default = "home-cheap-gke-cluster"
 }
 
-variable "replica_count" {
-  description = "Number of replica pods to create"
-  type        = number
-  default     = 1
+
+terraform {
+  required_providers {
+    flux = {
+      source = "fluxcd/flux"
+      version = "1.0.1"
+    }
+    kind = {
+      source  = "tehcyx/kind"
+      version = ">=0.0.16"
+    }
+    github = {
+      source  = "integrations/github"
+      version = ">=5.18.0"
+    }
+  }
 }
 
-variable "values_file" {
-  description = "The name of the traefik helmchart values file to use"
-  type        = string
-  default     = "values.yaml"
+
+provider "kind" {}
+
+resource "kind_cluster" "this" {
+  name = "flux-e2e"
 }
+
+
+provider "github" {
+  owner = var.github_org
+  token = var.github_token
+}
+
+resource "tls_private_key" "flux" {
+  algorithm   = "ECDSA"
+  ecdsa_curve = "P256"
+}
+
+resource "github_repository_deploy_key" "this" {
+  title      = "Flux"
+  repository = var.github_repository
+  key        = tls_private_key.flux.public_key_openssh
+  read_only  = "false"
+}
+
+
+provider "flux" {
+  kubernetes = {
+    host                   = kind_cluster.this.endpoint
+    client_certificate     = kind_cluster.this.client_certificate
+    client_key             = kind_cluster.this.client_key
+    cluster_ca_certificate = kind_cluster.this.cluster_ca_certificate
+  }
+  git = {
+    url = "ssh://git@github.com/${var.github_org}/${var.github_repository}.git"
+    ssh = {
+      username    = "git"
+      private_key = tls_private_key.flux.private_key_pem
+    }
+  }
+}
+
+resource "flux_bootstrap_git" "this" {
+  depends_on = [github_repository_deploy_key.this]
+
+  path = "kubernetes/flux"
+}
+
+
+
 
 provider "helm" {    
     kubernetes {
         config_path = "/home/gipsydanger/.kube/config"
     }
 }
+# provider "flux" {
+#   kubernetes = {
+#     config_path = "/home/gipsydanger/.kube/config"
+#   }
+#   git = {
+#     url = "https://github.com/rastydnb/home-cheap-gke-cluster.git"
+#   }
+# }
 
-# resource "helm_release" "traefik" {
-#   depends_on = [null_resource.local_k8s_context]
-#   namespace        = var.namespace
-#   create_namespace = true
-#   name             = "traefik"
-#   repository       = "https://traefik.github.io/charts"
-#   chart            = "traefik"
-#   version          = var.traefik_chart_version
+# resource "flux_bootstrap_git" "this" {
 
-#   # Helm chart deployment can sometimes take longer than the default 5 minutes
-#   timeout = var.timeout_seconds
+#   path = "kubernetes/flux"
+# }
 
-#   # If values file specified by the var.values_file input variable exists then apply the values from this file
-#   # else apply the default values from the chart
-#   values = [fileexists("${path.root}/${var.values_file}") == true ? file("${path.root}/${var.values_file}") : ""]
+# resource "null_resource" "bootstrap_flux" {
+#   provisioner "local-exec" {
+#     command = "kubectl apply --kustomize ../kubernetes/bootstrap"
+#   }
+# }
+
+# resource "null_resource" "flux_config" {
+#   depends_on = [null_resource.bootstrap_flux]
+#   provisioner "local-exec" {
+#     command = "kubectl apply --kustomize ../kubernetes/flux/config"
+#   }
 # }
 
 
-resource "null_resource" "bootstrap_flux" {
-  provisioner "local-exec" {
-    command = "kubectl apply --kustomize ../kubernetes/bootstrap"
-  }
-}
-
-resource "null_resource" "flux_config" {
-  depends_on = [null_resource.bootstrap_flux]
-  provisioner "local-exec" {
-    command = "kubectl apply --kustomize ../kubernetes/flux/config"
-  }
-}
 
 
-
-
-# resource "helm_release" "argocd" {
-#   name  = "argocd"
-
-#   repository       = "https://argoproj.github.io/argo-helm"
-#   chart            = "argo-cd"
-#   namespace        = "argocd"
-#   version          = "5.43.4"
-#   create_namespace = true
-
-#   # values = [
-#   #   file("values.yaml")
-#   # ]
-# }
-
-
-# resource "helm_release" "argocd-apps" {
-#   depends_on = [helm_release.argocd]
-#   name  = "argocd-apps"
-
-#   repository       = "https://argoproj.github.io/argo-helm"
-#   chart            = "argocd-apps"
-#   namespace        = "argocd"
-#   version          = "1.4.1"
-
-#   values = [
-#     file("../argocd/application.yaml")
-#   ]
-# }
