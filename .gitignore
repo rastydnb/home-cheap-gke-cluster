@@ -20,3 +20,4 @@ terraform.tfvars
 config.gcp.tfbackend
 secrets.tf
 home-ops.code-workspace
+backend.tf
