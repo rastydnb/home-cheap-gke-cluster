@@ -1,4 +1,3 @@
----
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -26,7 +25,7 @@ spec:
       create: true
       username: admin
     ingress:
-      enabled: true
+      enabled: false
       className: nginx
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-staging
@@ -34,14 +33,14 @@ spec:
           10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
         hajimari.io/icon: sawtooth-wave
       hosts:
-        - host: &host "gitops.${SECRET_DOMAIN}"
-          paths:
-            - path: /
-              pathType: Prefix
+      - host: &host "gitops.${SECRET_DOMAIN}"
+        paths:
+        - path: /
+          pathType: Prefix
       tls:
-        - hosts:
-            - *host
-          secretName: weave-gitops-tls
+      - hosts:
+        - *host
+        secretName: weave-gitops-tls
     networkPolicy:
       create: false
     metrics:
@@ -52,7 +51,7 @@ spec:
     podAnnotations:
       secret.reloader.stakater.com/reload: weave-gitops-secret
   valuesFrom:
-    - kind: Secret
-      name: weave-gitops-secret
-      valuesKey: adminPassword
-      targetPath: adminUser.passwordHash
+  - kind: Secret
+    name: weave-gitops-secret
+    valuesKey: adminPassword
+    targetPath: adminUser.passwordHash
