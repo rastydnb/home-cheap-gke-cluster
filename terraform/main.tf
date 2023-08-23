@@ -60,10 +60,6 @@ resource "google_compute_network" "default" {
   routing_mode = "REGIONAL"
 }
 
-variable "bucket_tfstate" {
-  description = "The bucket tfstate name"
-}
-
 variable "load_balancer" {
   description = "Enable cheap load balancer with NEG"
 }

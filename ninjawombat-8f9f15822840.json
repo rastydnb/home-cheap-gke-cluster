@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "ninjawombat",
+  "private_key_id": "8f9f15822840b15f51bfd8f3cc0e59fda9846f21",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC934buVnpsJDVq\nIKtXS5qlWcPRy3kXiLLYojxidlwUQsek+SHqLmEzZkFZacNAXKc46+hkE4z6ifTh\n1QAimUtkNw0hzuwXIYdXFMSpYvQaHIBFG48s4baE0YTcRrvs05pyyrgcR5aT4jRY\neVzyefh5kPAiH1qctB/ORP+wDYLETUf4/ZtMoQRD7D63ZEdu1/SNfRuGqbx3o9rn\n3zUnnlPHEJB+BvDq0nRx77+Sp2fEHxqkIE5XbCRaVqPTR2ac4ppUjdEo36HXZsvP\nJc+0Oa9ZfHjs7qHwaePAs+/VVZJA8iogTi3NBqCpWLXhHntb03aI35et6CZ5lDHj\n/jsQhFAPAgMBAAECggEABcGYjXI0DOzowk+852JvN52/ONrX0CBV97OswU7ASjb0\nvCoiCT+gX8FfsCPA28XTUKpKOyUiltfcLi/ZwggZXS+UEix77imXOPXJY9nlokME\nmn5pj/KZ03CnUVGYUeeKXPo2Aa7Olat7wHDmzKJo/Np+2odOenC1hCMwXeMoTeYn\ntt7BnfYYLxcjjoErbz0LNI30PZcZpnMz9JTBDF1JZGlszZHct9i60ZFW1jltWjKt\nKR4pF35AeOwg8a+kb25kDFYSmrXPiNyqrvSlIeyCh1pWsJqCidGE5BpTaIc8dglW\nyXut0nKPuxtRS2H1Y25FK613H2SNIsf7aJ0eP6rjxQKBgQD+RikFjDHO7c5nmolO\nPT8wau3EqB4qvk5DH7bQi8wZvHVMgokCpewhd2azmNyggmdsLFJtv4Y324tMcz+S\nViVEkDmlYIkEQ4QqUaIPKSJQdbsDh/5QKBNI+CmRN6MIcC8DMikL79nAXtctR8+v\nbSzLSlGQO/bn9dLJLP1vc/JdfQKBgQC/KXXiFnTQ5ZcnR+IL43l8GJ456mt0fYvU\nJ1QDUB9lLhW1SJuX2XfsP45igrlJvg1nwb5CegwGPhP26cIbTiC4/mb9k1QHTAFE\n9iODOWIWWCTshZ52CFNVv3jCRwdB540fet+JUBR6tylqA7mvK55o2e2jhSPKvp+7\n1MN7N2gJewKBgB7lMXjOFwM4m9q0yTgrcvEUHP3HG5s/8kxvnwvp4IvD/VClj7Y1\nqOJMGrt5uFz8W0qmfAF/wvQohd1tJ21FcFPLXmW8vAk7luR5dMJ40gWKuIVuUbU1\nmVpFZO+THgkZcGzn/FrJ8uBP5b9HuXFsR4QP7Kck0hRPJyRwhf6zzOAVAoGAOzoM\nRQUyIjrQDyKNXaOX0yQJeeYwbsIrHYsl03TylTWnEiix1GVTa4XxhoH8CGXy30++\ns/f+W7zGEL0yH6WgK9Dedfg8k5ov1n7wV8riogujPQjVJLrFnw6YypCZJgkoxzUZ\npwCBp9ex5B/NWwGHrfK/Vud8RGe1M8vi2P08pZsCgYEAlCoTiOaSI8gJ6BHmqgSH\n0n1bIgaKrm2fLcQpXyPcBy3uigutmiM8MicbtEoKCGRi0s7rtjdlCxQtBUjLOv3h\nhvgFZsd8+oh0Qogu1T4E7dUHVAgEH0/YJsznYikDOMFPbefjOjI2ZKY7TzVv9Q87\n4xj70aNWpBpcnn09MxjJH9s=\n-----END PRIVATE KEY-----\n",
+  "client_email": "terraform@ninjawombat.iam.gserviceaccount.com",
+  "client_id": "106554684780323715876",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/terraform%40ninjawombat.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
