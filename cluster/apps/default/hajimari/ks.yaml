@@ -6,7 +6,7 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: "true"
 spec:
-  path: ./kubernetes/apps/default/hajimari/app
+  path: ./cluster/apps/default/hajimari/app
   prune: true
   sourceRef:
     kind: GitRepository
