@@ -25,6 +25,9 @@ spec:
   uninstall:
     keepHistory: false
   values:
+    serviceAccount:
+      annotations:
+        iam.gke.io/gcp-service-account: external-secret-operator@ninjawombat.iam.gserviceaccount.com
     installCRDs: true
     serviceMonitor:
       enabled: false
