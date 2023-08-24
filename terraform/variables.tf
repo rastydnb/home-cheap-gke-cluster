@@ -52,14 +52,6 @@ variable "ssl_cert_key" {
   description = "Path to the SSL certificate private .key"
 }
 
-resource "google_compute_network" "default" {
-  name                    = var.network_name
-  auto_create_subnetworks = "false"
-  project = var.project_id
-  # Everything in this solution is deployed regionally
-  routing_mode = "REGIONAL"
-}
-
 variable "load_balancer" {
   description = "Enable cheap load balancer with NEG"
 }

@@ -6,7 +6,7 @@ metadata:
   labels:
     substitution.flux.home.arpa/enabled: "true"
 spec:
-  path: ./cluster/apps/flux-system/weave-gitops/app
+  path: ./kubernetes/apps/flux-system/weave-gitops/app
   prune: true
   sourceRef:
     kind: GitRepository
