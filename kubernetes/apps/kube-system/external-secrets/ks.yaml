@@ -19,3 +19,18 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 3m
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-external-secrets-store
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: cluster-apps-external-secrets
+  interval: 5m
+  path: "./kubernetes/apps/kube-system/external-secrets/stores"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
