@@ -27,7 +27,7 @@ spec:
   values:
     serviceAccount:
       annotations:
-        iam.gke.io/gcp-service-account: external-secret-operator@ninjawombat.iam.gserviceaccount.com
+        iam.gke.io/gcp-service-account: external-secrets@ninjawombat.iam.gserviceaccount.com
     installCRDs: true
     serviceMonitor:
       enabled: false

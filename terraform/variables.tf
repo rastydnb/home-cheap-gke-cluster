@@ -56,3 +56,4 @@ variable "load_balancer" {
   description = "Enable cheap load balancer with NEG"
 }
 
+

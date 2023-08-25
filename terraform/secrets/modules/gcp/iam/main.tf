@@ -7,7 +7,7 @@ module "service_account" {
   project_id = var.project_id
 
   names = [
-    "external-secret-operator"
+    "external-secrets"
   ]
 
   project_roles = [
@@ -37,7 +37,12 @@ module "iam" {
 resource "google_project_iam_member" "secret-admin" {
   project = var.project_id
   role    = "roles/secretmanager.secretAccessor"
-  member = "serviceAccount:${module.service_account.email}"
+  member = module.service_account.iam_email
+}
+
+output "project_member" {
+  description = "test"
+  value       = google_project_iam_member.secret-admin
 }
 
 # serviceAccount:ninjawombat.svc.id.goog[kube-system/external-secrets
