@@ -3,4 +3,4 @@ kind: Kustomization
 namespace: kube-system
 resources:
 - ./helmrelease.yaml
-- ./secretstore.yaml
+# - ./secretstore.yaml

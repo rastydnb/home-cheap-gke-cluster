@@ -7,7 +7,7 @@ variable "namespace" {
 variable "service_account" {
   type        = string
   description = "The Kubernetes service account"
-  default = "shared-kubernetes-external-secrets"
+  default = "external-secrets"
 }
 
 variable "project_id" {
