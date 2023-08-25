@@ -3,7 +3,7 @@
 # See links in the comments below for specifics. This page is a good place to understand the overall solution: 
 # https://cloud.google.com/kubernetes-engine/docs/how-to/standalone-neg
 
-provider "google-beta" {
+provider "google" {
   # Run 'gcloud auth application-default login' to get credentials.json
   # credentials = "${file("credentials.json")}"
   project     = var.project_id
@@ -29,12 +29,21 @@ resource "google_container_cluster" "default" {
   # Disable the Google Cloud Logging service because you may overrun the Logging free tier allocation, and it may be expensive
   logging_service = "none"
 
+  # Enable Workload Identity
+  workload_identity_config {
+    workload_pool = "${var.project_id}.svc.id.goog"
+  }
+  
+
   node_config {
     # More info on Spot VMs with GKE https://cloud.google.com/kubernetes-engine/docs/how-to/spot-vms#create_a_cluster_with_enabled
     spot = true
     machine_type = var.machine_type
     disk_size_gb = var.disk_size
     tags = ["${var.gke_cluster_name}"]
+    workload_metadata_config {
+      mode = "GKE_METADATA"
+    }
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform",
       "https://www.googleapis.com/auth/trace.append",
@@ -44,6 +53,8 @@ resource "google_container_cluster" "default" {
       "https://www.googleapis.com/auth/servicecontrol",
     ]
   }
+
+
   
   addons_config {
     http_load_balancing {
