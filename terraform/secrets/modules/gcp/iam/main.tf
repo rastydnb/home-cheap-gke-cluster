@@ -33,6 +33,13 @@ module "iam" {
   }
 }
 
+
+resource "google_project_iam_member" "secret-admin" {
+  project = var.project_id
+  role    = "roles/secretmanager.secretAccessor"
+  member = "serviceAccount:${module.service_account.email}"
+}
+
 # serviceAccount:ninjawombat.svc.id.goog[kube-system/external-secrets
 
 
