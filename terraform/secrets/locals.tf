@@ -7,10 +7,14 @@ locals {
       use_special_charts = false
     },
     {
-      name               = "demo-password-2"
-      autogenerate       = true
+      name               = "weave-gitops-admin"
+      autogenerate       = false
       chars_count        = 32
       use_special_charts = false
+      secret_value = "$2a$10$TfDPDXkXsgRmGYIUTGyUB.l0qh3ODA2qUa/ZPRaThoawHkB5/iD32"
     }
   ]
 }
+
+
+
