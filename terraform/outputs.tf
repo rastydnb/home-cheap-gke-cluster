@@ -1,4 +1,3 @@
-output "sa" {
-  value = module.secrets.iam_output
-  sensitive = false
+output "iam_output" {
+  value = module.iam
 }

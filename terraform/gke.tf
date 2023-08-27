@@ -9,13 +9,6 @@ provider "google" {
   project     = var.project_id
   region      = var.region
 }
-
-module "secrets" {
-  source = "./secrets"
-  project_id = var.project_id
-}
-
-
 resource "google_container_cluster" "default" {
   provider = google-beta
   project  = var.project_id
