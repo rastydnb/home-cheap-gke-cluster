@@ -57,3 +57,8 @@ variable "load_balancer" {
 }
 
 
+variable "secrets_map" {
+  description = "Map with secrets to save in secret manager"
+}
+
+

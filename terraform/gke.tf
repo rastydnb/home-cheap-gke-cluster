@@ -48,7 +48,6 @@ resource "google_container_cluster" "default" {
   }
 
 
-  
   addons_config {
     http_load_balancing {
       # This needs to be enabled for the NEG to be automatically created for the ingress gateway svc
@@ -98,3 +97,8 @@ resource "null_resource" "local_k8s_context" {
   }
 }
 
+
+module "flux" {
+  depends_on = [ null_resource.local_k8s_context ]
+  source = "./modules/flux"
+}
