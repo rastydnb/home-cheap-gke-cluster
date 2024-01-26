@@ -28,7 +28,7 @@ spec:
         name: not-used
       spec:
         decryption:
-          provider: sops
+          provider: sops   
           secretRef:
             name: sops-age
         postBuild:
@@ -38,4 +38,5 @@ spec:
             - kind: Secret
               name: cluster-secrets
     target:
+      kind: Kustomization
       labelSelector: substitution.flux.home.arpa/enabled=true
