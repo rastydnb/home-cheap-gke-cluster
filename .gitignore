@@ -20,3 +20,6 @@ terraform.tfvars
 config.gcp.tfbackend
 home-ops.code-workspace
 backend.tf
+.config.env
+kubeconfig
+gke_gcloud_auth_plugin_cache
