@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: weave-gitops
-      version: 4.0.12
+      version: 4.0.36
       sourceRef:
         kind: HelmRepository
         name: weave-gitops
@@ -23,24 +23,28 @@ spec:
   values:
     adminUser:
       create: true
+      createSecret: false
       username: admin
     ingress:
       enabled: false
-      className: nginx
+      ingressClassName: traefik
       annotations:
-        cert-manager.io/kubernetes-issuer: letsencrypt-staging
-        nginx.ingress.kubernetes.io/whitelist-source-range: |
-          10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-        hajimari.io/icon: sawtooth-wave
+        cert-manager.io/kubernetes-issuer: letsencrypt-production
+        hajimari.io/enable: "false"
+        # external-dns.alpha.kubernetes.io/target: "ipv4.${SECRET_DOMAIN}"
+        # external-dns.alpha.kubernetes.io/target: "${METALLB_INGRESS_ADDR}"
+        # external-dns.home.arpa/enabled: "true"
+        # external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
       hosts:
-      - host: &host "gitops.${SECRET_DOMAIN}"
+      - host: &host "weave-gitops.${SECRET_DOMAIN}"
         paths:
         - path: /
           pathType: Prefix
       tls:
       - hosts:
         - *host
-        secretName: weave-gitops-tls
+        secretName: *host
     networkPolicy:
       create: false
     metrics:
