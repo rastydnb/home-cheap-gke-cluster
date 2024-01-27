@@ -9,6 +9,11 @@ spec:
   ref:
     branch: main
   url: https://github.com/rastydnb/home-cheap-gke-cluster
+  ignore: |
+    # exclude all
+    /*
+    # include kubernetes directory
+    !/kubernetes
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
