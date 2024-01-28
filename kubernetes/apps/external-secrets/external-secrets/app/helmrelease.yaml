@@ -12,7 +12,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: external-secrets
-        namespace: flux-external-secrets
+        namespace: external-secrets
   maxHistory: 3
   install:
     createNamespace: true
