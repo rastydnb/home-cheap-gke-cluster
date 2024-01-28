@@ -15,7 +15,14 @@ tasks:
     - terraform plan {{.CLI_ARGS}}
 
   apply:
-    desc: Apply the changes to Cloudflare
+    desc: Apply the changes
     dir: "{{.TERRAFORM_DIR}}"
     cmds:
     - terraform apply {{.CLI_ARGS}}
+
+  destroy:
+    desc: Destroy the changes
+    dir: "{{.TERRAFORM_DIR}}"
+    cmds:
+    - terraform destroy {{.CLI_ARGS}}
+
